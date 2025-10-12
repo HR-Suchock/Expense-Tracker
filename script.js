@@ -3,7 +3,7 @@
 // ==========================
 
 let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
-let budgets = JSON.parse(localStorage.getItem("budgets")) || {}; // multiple month budget
+let budgets = JSON.parse(localStorage.getItem("budgets")) || {}; // monthly budgets
 let chart;
 
 // DOM Elements
@@ -64,14 +64,12 @@ expenseForm.addEventListener("submit", e => {
 });
 
 // --------------------------
-// Render Expenses (default this month)
+// Render Expenses
 // --------------------------
 function renderExpenses() {
   expenseList.innerHTML = "";
-
-  const selectedMonth = monthFilter.value || new Date().toISOString().slice(0, 7); // default current month
+  const selectedMonth = monthFilter.value || new Date().toISOString().slice(0, 7);
   let filtered = expenses.filter(exp => exp.date.startsWith(selectedMonth));
-
   if (categoryFilter.value) filtered = filtered.filter(exp => exp.category === categoryFilter.value);
 
   let totalExpense = 0;
@@ -94,7 +92,6 @@ function renderExpenses() {
     categorySet.add(exp.category);
   });
 
-  // Month-based budget
   const monthBudget = budgets[selectedMonth] || 0;
   displayBudget.innerText = monthBudget.toFixed(2);
   displayExpense.innerText = totalExpense.toFixed(2);
@@ -125,7 +122,7 @@ function deleteExpense(id) {
 }
 
 // --------------------------
-// Dynamic Category Filter
+// Category Filter
 // --------------------------
 function updateCategoryFilter(categorySet) {
   categoryFilter.innerHTML = '<option value="">All Categories</option>';
@@ -138,7 +135,7 @@ function updateCategoryFilter(categorySet) {
 }
 
 // --------------------------
-// Dynamic Chart
+// Chart
 // --------------------------
 function updateChart(categoryData) {
   const ctx = expenseChartCanvas.getContext("2d");
@@ -183,7 +180,7 @@ function generateColors(num) {
 filterBtn.addEventListener("click", renderExpenses);
 
 // --------------------------
-// Export PDF
+// Export PDF (mobile + PC friendly)
 // --------------------------
 exportPdfBtn.addEventListener("click", () => {
   const { jsPDF } = window.jspdf;
@@ -212,7 +209,21 @@ exportPdfBtn.addEventListener("click", () => {
   y += 10;
   doc.text(`Remaining: ${remaining.toFixed(2)} BDT`, 10, y);
 
-  doc.save(`Expense_Report_${selectedMonth}.pdf`);
+  // --------------------------
+  // Mobile-friendly: preview + download
+  // --------------------------
+  const pdfBlob = doc.output("blob");
+  const pdfURL = URL.createObjectURL(pdfBlob);
+
+  // In-app preview (works in AppGeyser)
+  const pdfWindow = window.open(pdfURL, "_blank");
+  if (!pdfWindow) alert("Allow popups to preview PDF");
+
+  // Automatic download
+  const a = document.createElement("a");
+  a.href = pdfURL;
+  a.download = `Expense_Report_${selectedMonth}.pdf`;
+  a.click();
 });
 
 // --------------------------
