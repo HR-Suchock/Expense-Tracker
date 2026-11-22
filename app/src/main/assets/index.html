@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0c12"><title>Mira — Voice Assistant</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="app">
+<header class="top"><div class="brand"><div class="brand-mark">m</div><div><b>Mira</b><small>your voice companion</small></div></div><span id="status" class="status">Not connected</span></header>
+<section class="hero">
+<div class="orb-wrap"><div class="orb" id="orb"><div class="orb-core"></div></div></div>
+<h1>Hello, I'm Mira.</h1><p class="sub">A thoughtful voice, a little warmth, and a conversation that feels natural.</p>
+<div id="stateText" class="state-text">Ready when you are</div>
+<button id="startBtn" class="primary">Start talking <span>↗</span></button>
+<button id="stopBtn" class="secondary" disabled>End conversation</button>
+<p class="disclosure">Mira is an AI assistant. Her voice is AI-generated.</p>
+</section>
+<section class="conversation"><div class="section-heading"><span>Conversation</span><button id="clearBtn" class="text-btn">Clear</button></div>
+<div id="messages" class="messages"><div class="empty">Your conversation will appear here.</div></div></section>
+<details class="settings"><summary>Connection settings</summary>
+<label>Backend URL<input id="apiUrl" type="url" placeholder="https://your-backend.example.com"></label>
+<label>App access code<input id="accessCode" type="password" placeholder="Set by your backend administrator"></label>
+<button id="saveSettings" class="secondary small">Save settings</button>
+<p class="hint">Your OpenAI API key must stay on the backend. Never paste it into this app.</p></details>
+<footer>Independent project · Not affiliated with Sesame AI</footer>
+</main>
+<audio id="remoteAudio" autoplay playsinline></audio>
+<script src="config.js"></script><script src="app.js"></script>
+</body></html>

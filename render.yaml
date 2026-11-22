@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: mira-voice-backend
+    runtime: docker
+    rootDir: backend
+    plan: starter
+    healthCheckPath: /health
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: APP_ACCESS_CODE
+        sync: false
+      - key: REALTIME_MODEL
+        value: gpt-realtime-2.1-mini
+      - key: REALTIME_VOICE
+        value: coral
